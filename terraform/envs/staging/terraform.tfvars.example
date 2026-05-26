@@ -1,0 +1,40 @@
+###############################################################################
+# Staging environment — overrides for cost-conscious staging deployment
+# Copy to terraform.tfvars and fill in real values
+###############################################################################
+
+environment = "staging"
+project     = "nodejs-api"
+region      = "ap-south-1"
+
+# Networking
+vpc_cidr          = "10.10.0.0/16"
+azs               = ["ap-south-1a", "ap-south-1b"]
+nat_gateway_count = 1   # cost saving — single NAT acceptable in staging
+
+# Compute
+instance_type    = "t3.small"
+min_size         = 1
+desired_capacity = 1
+max_size         = 3
+target_cpu       = 70
+
+# Observability
+log_retention_days = {
+  app_nodejs    = 7
+  system_syslog = 7
+  flow_logs     = 7
+  waf_logs      = 14
+}
+
+# Domain
+domain_name = "staging-api.example.com"
+
+# Tags
+common_tags = {
+  Environment = "staging"
+  Project     = "nodejs-api"
+  Owner       = "sre-team"
+  CostCenter  = "engineering"
+  ManagedBy   = "terraform"
+}

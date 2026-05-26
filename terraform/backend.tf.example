@@ -1,0 +1,23 @@
+###############################################################################
+# Terraform remote backend — S3 + DynamoDB for state locking
+# Copy to backend.tf and adjust bucket/key/table names
+###############################################################################
+
+terraform {
+  required_version = ">= 1.6"
+
+  backend "s3" {
+    bucket         = "nodejs-api-tfstate"
+    key            = "envs/production/terraform.tfstate"
+    region         = "ap-south-1"
+    dynamodb_table = "nodejs-api-tflock"
+    encrypt        = true
+  }
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
